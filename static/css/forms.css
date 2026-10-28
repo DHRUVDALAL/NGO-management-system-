@@ -1,0 +1,325 @@
+/* ==========================================================================
+   YuvaShakti Foundation - Forms & Action Portal Styles
+   Volunteer Registration, Donation Form, Student Enrollment & Inquiries
+   ========================================================================== */
+
+.page-header-simple {
+  padding: 3.5rem 0 2.5rem;
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-subtle);
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.page-header-simple h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.page-header-simple p {
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Form Container Card */
+.form-card {
+  background: #ffffff;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-lg);
+  padding: 3rem;
+  max-width: 780px;
+  margin: 0 auto 5rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.form-group.full-width {
+  grid-column: span 2;
+}
+
+.form-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary-900);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form-label .required {
+  color: var(--rose-500);
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.85rem 1.15rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border-subtle);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--text-main);
+  background-color: var(--bg-main);
+  transition: all var(--transition-fast);
+}
+
+.form-control:focus {
+  outline: none;
+  background-color: #ffffff;
+  border-color: var(--teal-600);
+  box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.15);
+}
+
+.form-control::placeholder {
+  color: var(--text-light);
+}
+
+textarea.form-control {
+  min-height: 120px;
+  resize: vertical;
+}
+
+select.form-control {
+  cursor: pointer;
+}
+
+.form-help {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Donation Preset Amount Chips */
+.donation-presets {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.preset-chip {
+  padding: 0.75rem;
+  text-align: center;
+  background: var(--bg-main);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--primary-800);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.preset-chip:hover, .preset-chip.active {
+  background: var(--teal-50);
+  border-color: var(--teal-600);
+  color: var(--teal-700);
+  transform: translateY(-2px);
+}
+
+/* Payment Mode Radio Cards */
+.payment-methods-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.payment-method-card {
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1rem 0.5rem;
+  text-align: center;
+  cursor: pointer;
+  background: var(--bg-main);
+  transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.payment-method-card input[type="radio"] {
+  display: none;
+}
+
+.payment-method-card .method-icon {
+  font-size: 1.4rem;
+}
+
+.payment-method-card .method-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary-900);
+}
+
+.payment-method-card:hover,
+.payment-method-card.selected {
+  border-color: var(--teal-600);
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.15);
+}
+
+.payment-method-card.selected {
+  border-width: 2px;
+}
+
+/* Printable Donation Receipt Component */
+.receipt-wrapper {
+  max-width: 680px;
+  margin: 3rem auto;
+}
+
+.receipt-card {
+  background: #ffffff;
+  border: 2px dashed #cbd5e1;
+  border-radius: var(--radius-lg);
+  padding: 3rem;
+  box-shadow: var(--shadow-xl);
+  position: relative;
+}
+
+.receipt-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-25deg);
+  font-size: 5rem;
+  font-weight: 900;
+  color: rgba(13, 148, 136, 0.05);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.receipt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 1.75rem;
+  border-bottom: 2px solid var(--primary-900);
+  margin-bottom: 1.75rem;
+}
+
+.receipt-brand h3 {
+  font-size: 1.5rem;
+  color: var(--primary-900);
+}
+
+.receipt-brand p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.receipt-meta {
+  text-align: right;
+  font-size: 0.85rem;
+}
+
+.receipt-number {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--teal-700);
+  font-size: 1.05rem;
+}
+
+.receipt-details-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+
+.receipt-details-table th,
+.receipt-details-table td {
+  padding: 0.85rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 0.92rem;
+}
+
+.receipt-details-table th {
+  color: var(--text-muted);
+  width: 40%;
+  font-weight: 600;
+}
+
+.receipt-details-table td {
+  font-weight: 500;
+  color: var(--primary-900);
+}
+
+.receipt-total-row {
+  background: var(--teal-50);
+}
+
+.receipt-total-row td {
+  font-size: 1.25rem !important;
+  font-weight: 800 !important;
+  color: var(--teal-800) !important;
+}
+
+.receipt-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.receipt-signature-box {
+  text-align: center;
+}
+
+.receipt-signature-line {
+  width: 160px;
+  height: 1px;
+  background: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .receipt-card, .receipt-card * {
+    visibility: visible;
+  }
+  .receipt-card {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-card {
+    padding: 2rem 1.5rem;
+  }
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .form-group.full-width {
+    grid-column: span 1;
+  }
+  .donation-presets {
+    grid-template-columns: 1fr 1fr;
+  }
+}

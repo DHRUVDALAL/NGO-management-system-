@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}YuvaShakti Foundation | NGO Management System{% endblock %}</title>
+  <meta name="description" content="YuvaShakti Foundation - Empowering communities through education, healthcare, and social welfare programs.">
+
+  <!-- Core Design System & Stylesheets -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/portal.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- Sticky Global Navigation -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="{{ url_for('home') }}" class="brand-logo" id="nav-brand">
+        <div class="brand-icon">YSF</div>
+        <div>YuvaShakti <span class="accent">Foundation</span></div>
+      </a>
+
+      <button class="menu-toggle" aria-label="Toggle navigation menu" id="mobile-menu-btn">☰</button>
+
+      <ul class="nav-menu" id="primary-navigation">
+        <li><a href="{{ url_for('home') }}" class="nav-link {% if active_page == 'home' %}active{% endif %}">Home</a></li>
+        <li><a href="{{ url_for('about') }}" class="nav-link {% if active_page == 'about' %}active{% endif %}">About Us</a></li>
+        <li><a href="{{ url_for('programs') }}" class="nav-link {% if active_page == 'programs' %}active{% endif %}">Programs</a></li>
+        <li><a href="{{ url_for('events') }}" class="nav-link {% if active_page == 'events' %}active{% endif %}">Camps & Events</a></li>
+        <li><a href="{{ url_for('volunteer_register') }}" class="nav-link {% if active_page == 'volunteer' %}active{% endif %}">Volunteer</a></li>
+        <li><a href="{{ url_for('student_register') }}" class="nav-link {% if active_page == 'student' %}active{% endif %}">Student Enrollment</a></li>
+        <li><a href="{{ url_for('contact') }}" class="nav-link {% if active_page == 'contact' %}active{% endif %}">Contact</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="{{ url_for('admin_login') }}" class="btn btn-outline btn-sm" id="btn-admin-portal">Admin Portal</a>
+        <a href="{{ url_for('donate') }}" class="btn btn-primary btn-sm" id="btn-nav-donate">❤️ Donate Now</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Flash Notification Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container" id="flash-alerts-container">
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category if category != 'error' else 'danger' }}">
+            <span>{{ message }}</span>
+            <button class="alert-close" aria-label="Dismiss alert">&times;</button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Main Content Block -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <h3>YuvaShakti Foundation</h3>
+        <p>A registered non-governmental organization committed to grassroot empowerment, student education, free medical relief camps, and community welfare initiatives.</p>
+        <p style="font-size: 0.85rem; color: #64748b;">Registration No: YSF/MAH/2021/8940 &bull; 80G Certified NGO</p>
+      </div>
+
+      <div>
+        <h4 class="footer-heading">Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="{{ url_for('home') }}">Home</a></li>
+          <li><a href="{{ url_for('about') }}">About Our Mission</a></li>
+          <li><a href="{{ url_for('programs') }}">Social Programs</a></li>
+          <li><a href="{{ url_for('events') }}">Upcoming Camps</a></li>
+          <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-heading">Get Involved</h4>
+        <ul class="footer-links">
+          <li><a href="{{ url_for('volunteer_register') }}">Join as Volunteer</a></li>
+          <li><a href="{{ url_for('donate') }}">Contribute & Donate</a></li>
+          <li><a href="{{ url_for('student_register') }}">Sponsor a Student</a></li>
+          <li><a href="{{ url_for('admin_login') }}">Administrator Login</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-contact">
+        <h4 class="footer-heading">Contact Information</h4>
+        <p>📍 YuvaShakti Bhavan, Sector 4, Central Ward</p>
+        <p>📞 +91 98200 12345 / +91 98200 54321</p>
+        <p>✉️ contact@yuvashaktifoundation.org</p>
+        <p>⏰ Mon - Sat: 9:00 AM - 6:30 PM</p>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <div>&copy; 2026 YuvaShakti Foundation. All Rights Reserved.</div>
+      <div>Designed with modern web standards &bull; Python Flask &amp; MySQL</div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/forms.js') }}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

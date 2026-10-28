@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% set active_page = 'events' %}
+
+{% block title %}Camps & Events | YuvaShakti Foundation{% endblock %}
+
+{% block content %}
+<section class="page-header-simple">
+  <div class="container">
+    <div class="section-tag">Field Outreach</div>
+    <h1>Camps, Drives &amp; Community Events</h1>
+    <p>Discover our scheduled on-ground welfare camps. Support an initiative through volunteer participation or dedicated campaign contributions.</p>
+  </div>
+</section>
+
+<section class="container" style="margin-bottom: 5rem;">
+  <div class="camps-grid">
+    {% for event in events %}
+    <div class="camp-card">
+      <div class="camp-status-badge">
+        <span class="badge badge-{{ event.status|lower }}">{{ event.status }}</span>
+      </div>
+      <span class="program-badge">{{ event.event_type }}</span>
+      <h3 style="font-size: 1.35rem; margin-bottom: 0.5rem; color: var(--primary-900);">{{ event.title }}</h3>
+      
+      <div class="camp-date">
+        📅 {{ event.event_date.strftime('%A, %B %d, %Y') if event.event_date else 'Scheduled Date TBA' }}
+      </div>
+      <div class="camp-venue">
+        📍 {{ event.venue }}
+      </div>
+
+      <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1.25rem; flex-grow: 1;">
+        {{ event.description }}
+      </p>
+
+      <!-- Funding Goal Progress -->
+      <div style="font-size: 0.85rem; font-weight: 600; color: var(--primary-800); display: flex; justify-content: space-between;">
+        <span>Campaign Funding</span>
+        <span>₹{{ "{:,.0f}".format(event.raised_budget) }} / ₹{{ "{:,.0f}".format(event.target_budget) }}</span>
+      </div>
+      <div class="camp-progress-bar">
+        {% set pct = (event.raised_budget / event.target_budget * 100)|round|int if event.target_budget > 0 else 0 %}
+        <div class="progress-fill" style="width: {{ [pct, 100]|min }}%;"></div>
+      </div>
+
+      <div class="camp-meta-row">
+        <span>👥 Capacity: {{ event.volunteer_capacity }} Volunteers</span>
+        <span><strong>{{ pct }}%</strong> funded</span>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; margin-top: auto;">
+        <a href="{{ url_for('donate', event_id=event.id) }}" class="btn btn-primary btn-sm" style="flex: 1;">
+          ❤️ Fund Camp
+        </a>
+        <a href="{{ url_for('volunteer_register') }}" class="btn btn-outline btn-sm" style="flex: 1;">
+          🤝 Volunteer
+        </a>
+      </div>
+    </div>
+    {% else %}
+    <div style="grid-column: 1 / -1; text-align: center; padding: 4rem; background: #ffffff; border-radius: var(--radius-lg); border: 1px solid var(--border-subtle);">
+      <h3>No Camps Scheduled Currently</h3>
+      <p style="color: var(--text-muted); margin-top: 0.5rem;">New welfare camps and relief drives will be posted soon.</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

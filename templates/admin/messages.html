@@ -1,0 +1,106 @@
+{% extends 'admin/base_admin.html' %}
+{% set admin_tab = 'messages' %}
+
+{% block title %}Public Enquiries & Messages | YuvaShakti Admin{% endblock %}
+
+{% block content %}
+<div class="admin-page-title-row">
+  <div>
+    <h2>Public Inquiries &amp; Community Messages</h2>
+    <p style="color: var(--text-muted); font-size: 0.95rem;">Review and resolve incoming messages from visitors, community partners, and prospective donors.</p>
+  </div>
+  <div class="admin-actions-bar">
+    <button onclick="exportTableToCSV('messages-table', 'yuvashakti_inquiries.csv')" class="btn btn-outline btn-sm">
+      📥 Export to CSV
+    </button>
+  </div>
+</div>
+
+<div class="table-card">
+  <div class="table-toolbar">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="message-search" placeholder="Search by name, email, subject...">
+    </div>
+
+    <div class="table-filters">
+      <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">Status:</label>
+      <select id="message-status-filter" class="form-control" style="padding: 0.45rem 1rem; width: auto; font-size: 0.85rem;">
+        <option value="all">All Inquiries</option>
+        <option value="new">New</option>
+        <option value="in review">In Review</option>
+        <option value="resolved">Resolved</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="data-table" id="messages-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Sender Info</th>
+          <th>Subject</th>
+          <th>Message Details</th>
+          <th>Received At</th>
+          <th>Status</th>
+          <th class="no-export">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in messages %}
+        <tr>
+          <td><code style="font-family: var(--font-mono);">#{{ m.id }}</code></td>
+          <td>
+            <div class="table-user-cell">
+              <span class="table-user-name">{{ m.name }}</span>
+              <span class="table-user-sub">{{ m.email }}</span>
+              {% if m.phone %}
+              <span class="table-user-sub">{{ m.phone }}</span>
+              {% endif %}
+            </div>
+          </td>
+          <td>
+            <span style="font-weight: 600; color: var(--primary-900);">{{ m.subject }}</span>
+          </td>
+          <td style="max-width: 340px;">
+            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">{{ m.message }}</p>
+          </td>
+          <td style="white-space: nowrap; font-size: 0.85rem;">
+            {{ m.created_at.strftime('%d-%b-%Y %H:%M') if m.created_at else '' }}
+          </td>
+          <td>
+            <span class="badge badge-{{ 'completed' if m.status == 'Resolved' else ('pending' if m.status == 'In Review' else 'active') }}">
+              {{ m.status }}
+            </span>
+          </td>
+          <td class="no-export">
+            <div class="table-actions">
+              {% if m.status != 'Resolved' %}
+              <button onclick="updateEntityStatus('{{ url_for('admin_message_status') }}', {{ m.id }}, 'Resolved')" class="action-btn toggle-active" title="Mark Resolved">Resolve</button>
+              {% else %}
+              <button onclick="updateEntityStatus('{{ url_for('admin_message_status') }}', {{ m.id }}, 'New')" class="action-btn toggle-inactive" title="Reopen Message">Reopen</button>
+              {% endif %}
+
+              <form method="POST" action="{{ url_for('admin_delete_message', id=m.id) }}" style="display: inline;" onsubmit="return confirm('Delete this message?');">
+                <button type="submit" class="action-btn" style="color: var(--rose-600);" title="Delete Message">✕</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 3rem;">No inquiries received yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initTableFilter('message-search', 'message-status-filter', 'messages-table');
+  });
+</script>
+{% endblock %}

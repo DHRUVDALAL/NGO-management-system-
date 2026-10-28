@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}YuvaShakti Admin Center{% endblock %}</title>
+
+  <!-- Core Design System & Admin Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+
+  <!-- Chart.js CDN for interactive visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body class="admin-layout">
+
+  <!-- Admin Top Navbar -->
+  <header class="admin-navbar">
+    <div class="admin-nav-brand">
+      <div class="brand-icon" style="width: 36px; height: 36px; font-size: 1rem;">YSF</div>
+      <span>YuvaShakti <span class="accent">Admin Center</span></span>
+      <span class="admin-badge">NGO Management</span>
+    </div>
+
+    <div class="admin-user-menu">
+      <a href="{{ url_for('home') }}" class="btn btn-outline btn-sm" style="color: #ffffff; border-color: #334155;" target="_blank">
+        🌐 View Public Site
+      </a>
+
+      {% if session.get('admin_id') %}
+      <div class="admin-user-info">
+        <div class="admin-avatar">
+          {{ session.get('admin_username', 'A')[0].upper() }}
+        </div>
+        <div>
+          <div class="admin-details-name">{{ session.get('admin_name', 'Administrator') }}</div>
+          <div class="admin-details-role">@{{ session.get('admin_username', 'admin') }}</div>
+        </div>
+      </div>
+
+      <a href="{{ url_for('admin_logout') }}" class="btn btn-danger btn-sm" id="btn-admin-logout">
+        Logout
+      </a>
+      {% endif %}
+    </div>
+  </header>
+
+  <!-- Admin Secondary Tab Navigation -->
+  {% if session.get('admin_id') %}
+  <nav class="admin-subnav">
+    <a href="{{ url_for('admin_dashboard') }}" class="admin-tab {% if admin_tab == 'dashboard' %}active{% endif %}">
+      📊 Dashboard Overview
+    </a>
+    <a href="{{ url_for('admin_volunteers') }}" class="admin-tab {% if admin_tab == 'volunteers' %}active{% endif %}">
+      🤝 Volunteers Directory
+    </a>
+    <a href="{{ url_for('admin_students') }}" class="admin-tab {% if admin_tab == 'students' %}active{% endif %}">
+      🎓 Student Beneficiaries
+    </a>
+    <a href="{{ url_for('admin_donations') }}" class="admin-tab {% if admin_tab == 'donations' %}active{% endif %}">
+      💰 Donations &amp; Receipts
+    </a>
+    <a href="{{ url_for('admin_events') }}" class="admin-tab {% if admin_tab == 'events' %}active{% endif %}">
+      🏕️ Camps &amp; Welfare Drives
+    </a>
+    <a href="{{ url_for('admin_messages') }}" class="admin-tab {% if admin_tab == 'messages' %}active{% endif %}">
+      📬 Public Enquiries
+    </a>
+  </nav>
+  {% endif %}
+
+  <!-- Flash Alerts -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container">
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category if category != 'error' else 'danger' }}">
+            <span>{{ message }}</span>
+            <button class="alert-close">&times;</button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Main Content -->
+  <main class="admin-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Scripts -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

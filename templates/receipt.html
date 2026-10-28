@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Donation Receipt #{{ donation.receipt_number }} | YuvaShakti Foundation{% endblock %}
+
+{% block content %}
+<section class="container" style="padding-top: 2rem;">
+  <div class="receipt-wrapper">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;" class="no-print">
+      <a href="{{ url_for('donate') }}" class="btn btn-outline btn-sm">&larr; Make Another Donation</a>
+      <button onclick="window.print()" class="btn btn-primary btn-sm" id="btn-print-receipt">
+        🖨️ Print / Save as PDF
+      </button>
+    </div>
+
+    <div class="receipt-card">
+      <div class="receipt-watermark">80G CERTIFIED</div>
+
+      <div class="receipt-header">
+        <div class="receipt-brand">
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+            <div class="brand-icon" style="width: 34px; height: 34px; font-size: 0.95rem;">YSF</div>
+            <h3 style="font-size: 1.35rem; margin: 0;">YuvaShakti Foundation</h3>
+          </div>
+          <p>Registration No: YSF/MAH/2021/8940</p>
+          <p>80G Order No: CIT(E)/PNE/80G/2021-22/A-412</p>
+          <p>Address: YuvaShakti Bhavan, Sector 4, Central Ward</p>
+        </div>
+
+        <div class="receipt-meta">
+          <div style="text-transform: uppercase; font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">Official Receipt</div>
+          <div class="receipt-number">{{ donation.receipt_number }}</div>
+          <div style="color: var(--text-muted); margin-top: 0.35rem;">
+            Date: <strong>{{ donation.donation_date.strftime('%d-%b-%Y') if donation.donation_date else '' }}</strong>
+          </div>
+        </div>
+      </div>
+
+      <table class="receipt-details-table">
+        <tbody>
+          <tr>
+            <th>Received With Thanks From:</th>
+            <td><strong>{{ donation.donor_name }}</strong></td>
+          </tr>
+          <tr>
+            <th>Donor Email:</th>
+            <td>{{ donation.donor_email }}</td>
+          </tr>
+          <tr>
+            <th>Donor Phone:</th>
+            <td>{{ donation.donor_phone or 'N/A' }}</td>
+          </tr>
+          <tr>
+            <th>Dedicated Cause / Camp:</th>
+            <td>{{ donation.cause_name }}</td>
+          </tr>
+          <tr>
+            <th>Payment Mode:</th>
+            <td><span class="badge badge-active">{{ donation.payment_mode }}</span></td>
+          </tr>
+          <tr>
+            <th>Transaction / UTR Reference:</th>
+            <td><code style="font-family: var(--font-mono); font-size: 0.9rem;">{{ donation.transaction_ref }}</code></td>
+          </tr>
+          <tr class="receipt-total-row">
+            <th>Total Amount Donated:</th>
+            <td>₹{{ "{:,.2f}".format(donation.amount) }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="background: var(--bg-main); padding: 1rem 1.25rem; border-radius: var(--radius-md); font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.5rem;">
+        * Note: Donations to YuvaShakti Foundation are eligible for deduction under Section 80G of the Income Tax Act. This is a computer-generated receipt valid for tax exemption filing.
+      </div>
+
+      <div class="receipt-footer">
+        <div style="font-size: 0.8rem; color: var(--text-muted);">
+          System Timestamp: {{ donation.created_at.strftime('%Y-%m-%d %H:%M:%S UTC') if donation.created_at else '' }}
+        </div>
+        <div class="receipt-signature-box">
+          <div class="receipt-signature-line"></div>
+          <div style="font-size: 0.82rem; font-weight: 700; color: var(--primary-900);">Authorized Signatory</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted);">YuvaShakti Foundation</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

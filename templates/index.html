@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% set active_page = 'home' %}
+
+{% block title %}YuvaShakti Foundation | Empowering Youth, Children & Communities{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container hero-grid">
+    <div>
+      <div class="hero-badge">
+        <span>🌱 YuvaShakti Foundation</span>
+        <span>&bull;</span>
+        <span>Building Hope &amp; Dignity</span>
+      </div>
+      <h1 class="hero-title">
+        Empowering Youth, <br>
+        Educating Children, <br>
+        <span class="highlight">Transforming Communities.</span>
+      </h1>
+      <p class="hero-subtitle">
+        A centralized, transparent platform connecting passionate volunteers, generous donors, and grassroots community initiatives. Together, we bring quality education, free healthcare, and livelihood support to those who need it most.
+      </p>
+
+      <div class="hero-actions">
+        <a href="{{ url_for('volunteer_register') }}" class="btn btn-primary" id="hero-btn-volunteer">
+          <span>🤝 Join as Volunteer</span>
+        </a>
+        <a href="{{ url_for('donate') }}" class="btn btn-accent" id="hero-btn-donate">
+          <span>❤️ Make a Donation</span>
+        </a>
+        <a href="{{ url_for('events') }}" class="btn btn-outline" id="hero-btn-events">
+          <span>📅 View Camps &amp; Events</span>
+        </a>
+      </div>
+
+      <!-- Real-time Database Metrics Row -->
+      <div class="hero-stats-row">
+        <div class="hero-stat-item">
+          <h4 id="stat-volunteers">{{ total_volunteers }}+</h4>
+          <p>Registered Volunteers</p>
+        </div>
+        <div class="hero-stat-item">
+          <h4 id="stat-active-volunteers">{{ active_volunteers }}</h4>
+          <p>Active on Field</p>
+        </div>
+        <div class="hero-stat-item">
+          <h4 id="stat-students">{{ total_students }}+</h4>
+          <p>Students Supported</p>
+        </div>
+        <div class="hero-stat-item">
+          <h4 id="stat-donations">₹{{ "{:,.0f}".format(total_donations) }}</h4>
+          <p>Funds Mobilized</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Side Interactive Impact Showcase -->
+    <div>
+      <div class="hero-visual-card">
+        <div class="card-header-bar">
+          <h3 style="font-size: 1.15rem; color: var(--primary-900);">Live Foundation Impact</h3>
+          <span class="card-pill">Verified Data</span>
+        </div>
+
+        <div class="impact-list">
+          <div class="impact-item">
+            <div class="impact-icon icon-teal">📚</div>
+            <div class="impact-info">
+              <h5>Slum Education Initiative</h5>
+              <p>Providing free evening tuition, school books, and stationery kits for young learners.</p>
+            </div>
+          </div>
+
+          <div class="impact-item">
+            <div class="impact-icon icon-amber">🩺</div>
+            <div class="impact-info">
+              <h5>Free Medical &amp; Eye Camps</h5>
+              <p>Diagnostic checkups, prescription spectacles, and preventative healthcare for low-income families.</p>
+            </div>
+          </div>
+
+          <div class="impact-item">
+            <div class="impact-icon icon-blue">🍲</div>
+            <div class="impact-info">
+              <h5>Relief &amp; Nutrition Drives</h5>
+              <p>Nutritional grains, clean water kits, and winter blankets for vulnerable shelters.</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; text-align: center;">
+          <a href="{{ url_for('about') }}" class="btn btn-outline btn-sm" style="width: 100%;">
+            Learn More About Our Purpose &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Mission & Vision Section -->
+<section style="padding: 5rem 0; background: var(--bg-main);">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">Core Philosophy</div>
+      <h2 class="section-title">Why YuvaShakti Foundation Exists</h2>
+      <p class="section-subtitle">
+        Bridging the gap between compassionate citizens and underprivileged communities through structured, transparent, and quantifiable action.
+      </p>
+    </div>
+
+    <div class="mission-vision-grid">
+      <div class="mv-card mission">
+        <div class="mv-icon">🎯</div>
+        <h3>Our Mission</h3>
+        <p>
+          To mobilize passionate youth volunteers and dedicated resources to provide quality educational support, accessible preventative healthcare, and emergency relief services to marginalized families across society.
+        </p>
+      </div>
+
+      <div class="mv-card vision">
+        <div class="mv-icon">✨</div>
+        <h3>Our Vision</h3>
+        <p>
+          A just, self-sustaining society where every child receives quality schooling, every family has access to basic medical dignity, and youth leaders actively participate in nation-building through social service.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Active Camps & Community Drives Section -->
+<section style="padding: 5rem 0; background: #ffffff; border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">Direct Action</div>
+      <h2 class="section-title">Current Camps &amp; Welfare Events</h2>
+      <p class="section-subtitle">
+        Join our ongoing on-ground social initiatives as a volunteer or contribute towards camp supplies.
+      </p>
+    </div>
+
+    <div class="camps-grid">
+      {% for event in events[:3] %}
+      <div class="camp-card">
+        <div class="camp-status-badge">
+          <span class="badge badge-{{ event.status|lower }}">{{ event.status }}</span>
+        </div>
+        <span class="program-badge">{{ event.event_type }}</span>
+        <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--primary-900);">{{ event.title }}</h3>
+        <div class="camp-date">📅 {{ event.event_date.strftime('%B %d, %Y') if event.event_date else 'Scheduled Soon' }}</div>
+        <div class="camp-venue">📍 {{ event.venue }}</div>
+        <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem; flex-grow: 1;">
+          {{ event.description }}
+        </p>
+
+        <!-- Camp Budget Meter -->
+        <div style="font-size: 0.85rem; font-weight: 600; color: var(--primary-800); display: flex; justify-content: space-between;">
+          <span>Fund Target</span>
+          <span>₹{{ "{:,.0f}".format(event.raised_budget) }} / ₹{{ "{:,.0f}".format(event.target_budget) }}</span>
+        </div>
+        <div class="camp-progress-bar">
+          {% set pct = (event.raised_budget / event.target_budget * 100)|round|int if event.target_budget > 0 else 0 %}
+          <div class="progress-fill" style="width: {{ [pct, 100]|min }}%;"></div>
+        </div>
+
+        <div class="camp-meta-row">
+          <span>👥 Capacity: {{ event.volunteer_capacity }} Volunteers</span>
+          <span><strong>{{ pct }}%</strong> funded</span>
+        </div>
+
+        <div style="display: flex; gap: 0.5rem; margin-top: auto;">
+          <a href="{{ url_for('donate', event_id=event.id) }}" class="btn btn-primary btn-sm" style="flex: 1;">Support Camp</a>
+          <a href="{{ url_for('volunteer_register') }}" class="btn btn-outline btn-sm" style="flex: 1;">Volunteer</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div style="text-align: center; margin-top: 3rem;">
+      <a href="{{ url_for('events') }}" class="btn btn-outline" id="btn-all-events">
+        Explore All Camps &amp; Drives &rarr;
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action Banner -->
+<section class="container">
+  <div class="cta-banner">
+    <h2>Be the Spark of Transformation</h2>
+    <p>Whether you give two hours of your weekend to teach a child or contribute financial resources for medical kits, your support creates tangible, measurable impact.</p>
+    <div class="cta-actions">
+      <a href="{{ url_for('volunteer_register') }}" class="btn btn-accent" id="cta-volunteer-btn">Register as Volunteer</a>
+      <a href="{{ url_for('donate') }}" class="btn btn-primary" id="cta-donate-btn">Donate for a Cause</a>
+      <a href="{{ url_for('student_register') }}" class="btn btn-secondary" id="cta-student-btn">Sponsor a Student</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

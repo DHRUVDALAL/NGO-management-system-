@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% set active_page = 'programs' %}
+
+{% block title %}Our Programs | YuvaShakti Foundation{% endblock %}
+
+{% block content %}
+<section class="page-header-simple">
+  <div class="container">
+    <div class="section-tag">Community Action</div>
+    <h1>Our Key Programs &amp; Initiatives</h1>
+    <p>Discover our core social programs designed to address educational inequalities, healthcare access, and youth development.</p>
+  </div>
+</section>
+
+<section class="container" style="margin-bottom: 5rem;">
+  <div class="programs-grid">
+    <!-- Program 1 -->
+    <div class="program-card">
+      <div class="program-badge">Education &amp; Literacy</div>
+      <h3 class="program-title">Gyan Setu: Evening Remedial Learning</h3>
+      <p class="program-desc">
+        A community-driven tutoring initiative targeting primary and secondary students from municipal schools. Volunteer teachers provide daily guidance in basic mathematics, science, and English to prevent dropouts and boost academic performance.
+      </p>
+      <div style="margin-bottom: 1.5rem; font-size: 0.88rem; color: var(--text-muted);">
+        <div>🎯 <strong>Beneficiaries:</strong> 350+ Underprivileged Students</div>
+        <div>📍 <strong>Locations:</strong> 4 Community Centers &amp; Ward Schools</div>
+      </div>
+      <div class="program-meta">
+        <a href="{{ url_for('student_register') }}" class="btn btn-outline btn-sm">Sponsor a Student</a>
+        <a href="{{ url_for('volunteer_register') }}" class="btn btn-primary btn-sm">Teach as Volunteer</a>
+      </div>
+    </div>
+
+    <!-- Program 2 -->
+    <div class="program-card">
+      <div class="program-badge">Healthcare &amp; Hygiene</div>
+      <h3 class="program-title">Arogya Sparsh: Mobile Health &amp; Eye Camps</h3>
+      <p class="program-desc">
+        Bringing certified doctors, optometrists, and medical volunteers directly into informal settlements. We organize comprehensive vision tests, dispense prescription eyeglasses free of charge, and conduct preventative screenings for chronic ailments.
+      </p>
+      <div style="margin-bottom: 1.5rem; font-size: 0.88rem; color: var(--text-muted);">
+        <div>🎯 <strong>Beneficiaries:</strong> 1,200+ Screenings Annually</div>
+        <div>📍 <strong>Frequency:</strong> Twice Monthly Camps</div>
+      </div>
+      <div class="program-meta">
+        <a href="{{ url_for('donate') }}" class="btn btn-accent btn-sm">Fund Eye Kits</a>
+        <a href="{{ url_for('volunteer_register') }}" class="btn btn-primary btn-sm">Join Medical Team</a>
+      </div>
+    </div>
+
+    <!-- Program 3 -->
+    <div class="program-card">
+      <div class="program-badge">Youth Livelihood</div>
+      <h3 class="program-title">Yuva Disha: Vocational &amp; Digital Skills</h3>
+      <p class="program-desc">
+        Bridging the employment gap for high-school graduates and young adults through intensive workshops in computer basics, digital documentation, conversational English, and interview preparation.
+      </p>
+      <div style="margin-bottom: 1.5rem; font-size: 0.88rem; color: var(--text-muted);">
+        <div>🎯 <strong>Beneficiaries:</strong> 180+ Youths Certified</div>
+        <div>📍 <strong>Venue:</strong> Digital Learning Lab</div>
+      </div>
+      <div class="program-meta">
+        <a href="{{ url_for('contact') }}" class="btn btn-outline btn-sm">CSR Partnership</a>
+        <a href="{{ url_for('volunteer_register') }}" class="btn btn-primary btn-sm">Mentor Youths</a>
+      </div>
+    </div>
+
+    <!-- Program 4 -->
+    <div class="program-card">
+      <div class="program-badge">Emergency Relief</div>
+      <h3 class="program-title">Poshak Aahar: Nutrition &amp; Winter Relief</h3>
+      <p class="program-desc">
+        Distributing wholesome grocery rations and warm clothing to elderly residents, destitute families, and street workers during harsh winter months and monsoon flood emergencies.
+      </p>
+      <div style="margin-bottom: 1.5rem; font-size: 0.88rem; color: var(--text-muted);">
+        <div>🎯 <strong>Beneficiaries:</strong> 850+ Families Supported</div>
+        <div>📍 <strong>Scope:</strong> Emergency Response Drives</div>
+      </div>
+      <div class="program-meta">
+        <a href="{{ url_for('donate') }}" class="btn btn-accent btn-sm">Sponsor a Ration Kit</a>
+        <a href="{{ url_for('events') }}" class="btn btn-primary btn-sm">View Upcoming Drive</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-banner">
+    <h2>Want to Start a New Program in Your Neighborhood?</h2>
+    <p>We actively collaborate with colleges, residential associations, and civic bodies to launch localized camps and tuition batches.</p>
+    <div class="cta-actions">
+      <a href="{{ url_for('contact') }}" class="btn btn-primary">Submit a Community Proposal</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

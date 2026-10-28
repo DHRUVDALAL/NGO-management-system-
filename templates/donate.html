@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% set active_page = 'donate' %}
+
+{% block title %}Donate to YuvaShakti Foundation | Transparent Giving{% endblock %}
+
+{% block content %}
+<section class="page-header-simple">
+  <div class="container">
+    <div class="section-tag">Empower Through Giving</div>
+    <h1>Make a Contribution</h1>
+    <p>Every contribution directly finances school textbooks, spectacles for elderly patients, and daily nutrition for marginalized children. 100% accounted for with instant receipt generation.</p>
+  </div>
+</section>
+
+<section class="container">
+  <div class="form-card">
+    <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.25rem;">
+      <h3 style="font-size: 1.4rem; color: var(--primary-900); margin-bottom: 0.35rem;">Donation Information</h3>
+      <p style="font-size: 0.9rem; color: var(--text-muted);">Contributions are eligible for tax exemption benefits under Section 80G.</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('donate') }}" data-validate="true" id="donation-form">
+      <!-- 1. Select Amount Presets -->
+      <div class="form-group full-width">
+        <label class="form-label">
+          Choose Donation Amount (INR) <span class="required">*</span>
+        </label>
+        <div class="donation-presets">
+          <div class="preset-chip active" data-amount="1000">₹1,000</div>
+          <div class="preset-chip" data-amount="2500">₹2,500</div>
+          <div class="preset-chip" data-amount="5000">₹5,000</div>
+          <div class="preset-chip" data-amount="10000">₹10,000</div>
+        </div>
+
+        <div style="position: relative;">
+          <input type="number" id="custom_amount" name="amount" class="form-control" placeholder="Or enter custom amount in ₹" min="50" value="1000" required>
+        </div>
+        <div class="form-help">E.g., ₹1,000 sponsors 1 student's books and uniform for an entire semester.</div>
+      </div>
+
+      <div class="form-grid">
+        <!-- 2. Select Cause / Camp -->
+        <div class="form-group full-width">
+          <label class="form-label" for="event_id">
+            Direct My Contribution Towards
+          </label>
+          <select id="event_id" name="event_id" class="form-control">
+            <option value="">General Foundation Fund (Where Most Needed)</option>
+            {% for event in events %}
+            <option value="{{ event.id }}" {% if selected_event_id == event.id %}selected{% endif %}>
+              Camp: {{ event.title }} ({{ event.event_type }})
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- 3. Donor Name -->
+        <div class="form-group">
+          <label class="form-label" for="donor_name">
+            Donor Full Name <span class="required">*</span>
+          </label>
+          <input type="text" id="donor_name" name="donor_name" class="form-control" placeholder="e.g. Dr. Vikram Sen" required>
+        </div>
+
+        <!-- 4. Donor Email -->
+        <div class="form-group">
+          <label class="form-label" for="donor_email">
+            Email Address (for Receipt) <span class="required">*</span>
+          </label>
+          <input type="email" id="donor_email" name="donor_email" class="form-control" placeholder="donor@example.com" required>
+        </div>
+
+        <!-- 5. Donor Phone -->
+        <div class="form-group full-width">
+          <label class="form-label" for="donor_phone">
+            Contact / Mobile Number
+          </label>
+          <input type="tel" id="donor_phone" name="donor_phone" class="form-control" placeholder="+91 98200 12345">
+        </div>
+      </div>
+
+      <!-- 6. Payment Mode Cards -->
+      <div class="form-group full-width" style="margin-top: 1.25rem;">
+        <label class="form-label">
+          Payment Method <span class="required">*</span>
+        </label>
+        <div class="payment-methods-grid">
+          <label class="payment-method-card selected">
+            <input type="radio" name="payment_mode" value="UPI" checked>
+            <div class="method-icon">📱</div>
+            <div class="method-title">UPI / QR</div>
+          </label>
+
+          <label class="payment-method-card">
+            <input type="radio" name="payment_mode" value="NetBanking">
+            <div class="method-icon">🏦</div>
+            <div class="method-title">Net Banking</div>
+          </label>
+
+          <label class="payment-method-card">
+            <input type="radio" name="payment_mode" value="Credit/Debit Card">
+            <div class="method-icon">💳</div>
+            <div class="method-title">Debit / Card</div>
+          </label>
+
+          <label class="payment-method-card">
+            <input type="radio" name="payment_mode" value="Cash">
+            <div class="method-icon">💵</div>
+            <div class="method-title">Direct Cash</div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Transaction Ref / Note (Simulated Gateway / Verified Offline) -->
+      <div class="form-group full-width">
+        <label class="form-label" for="transaction_ref">
+          Reference / UTR Number (Optional if paid offline)
+        </label>
+        <input type="text" id="transaction_ref" name="transaction_ref" class="form-control" placeholder="e.g. UPI Ref / Bank UTR / Check No.">
+        <div class="form-help">Leave blank to auto-generate a secure transaction acknowledgment reference.</div>
+      </div>
+
+      <div style="margin-top: 2rem; border-top: 1px solid var(--border-subtle); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div style="font-size: 0.85rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.4rem;">
+          🔒 256-Bit SSL Encrypted Record
+        </div>
+        <button type="submit" class="btn btn-accent" id="btn-submit-donation" style="padding: 0.85rem 2rem; font-size: 1.05rem;">
+          Complete &amp; Generate 80G Receipt &rarr;
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

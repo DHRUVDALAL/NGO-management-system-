@@ -1,0 +1,240 @@
+{% extends 'admin/base_admin.html' %}
+{% set admin_tab = 'dashboard' %}
+
+{% block title %}Activity & Impact Dashboard | YuvaShakti Admin{% endblock %}
+
+{% block content %}
+<div class="admin-page-title-row">
+  <div>
+    <h2>Activity &amp; Impact Dashboard</h2>
+    <p style="color: var(--text-muted); font-size: 0.95rem;">Real-time overview of foundation volunteers, donations, student welfare, and upcoming camps.</p>
+  </div>
+  <div class="admin-actions-bar">
+    <a href="{{ url_for('admin_volunteers') }}" class="btn btn-outline btn-sm">Manage Volunteers</a>
+    <a href="{{ url_for('admin_donations') }}" class="btn btn-primary btn-sm">View All Donations</a>
+  </div>
+</div>
+
+<!-- 6 KPI Stat Cards Grid (Chapter 5.7) -->
+<div class="stats-grid">
+  <!-- 1. Total Volunteers -->
+  <div class="stat-card">
+    <div class="stat-card-header">
+      <span class="stat-label">Total Volunteers</span>
+      <div class="stat-icon teal">👥</div>
+    </div>
+    <div class="stat-value" id="kpi-total-volunteers">{{ total_volunteers }}</div>
+    <div class="stat-footer">
+      <span>Status: {{ active_volunteers }} Active</span>
+      <span class="badge badge-active">{{ (active_volunteers / total_volunteers * 100)|round|int if total_volunteers > 0 else 0 }}% Active</span>
+    </div>
+  </div>
+
+  <!-- 2. Active Volunteers -->
+  <div class="stat-card">
+    <div class="stat-card-header">
+      <span class="stat-label">Active Field Force</span>
+      <div class="stat-icon emerald">⚡</div>
+    </div>
+    <div class="stat-value" id="kpi-active-volunteers">{{ active_volunteers }}</div>
+    <div class="stat-footer">
+      <span>Ready for Camp Deployment</span>
+      <span style="color: var(--emerald-600); font-weight: 700;">Verified</span>
+    </div>
+  </div>
+
+  <!-- 3. Total Donations -->
+  <div class="stat-card">
+    <div class="stat-card-header">
+      <span class="stat-label">Total Funds Mobilized</span>
+      <div class="stat-icon amber">💰</div>
+    </div>
+    <div class="stat-value" id="kpi-total-donations">₹{{ "{:,.0f}".format(total_donations) }}</div>
+    <div class="stat-footer">
+      <span>Across {{ total_donors }} Unique Donors</span>
+      <span style="color: var(--amber-600); font-weight: 700;">80G Certified</span>
+    </div>
+  </div>
+
+  <!-- 4. Total Donors -->
+  <div class="stat-card">
+    <div class="stat-card-header">
+      <span class="stat-label">Donor Network</span>
+      <div class="stat-icon blue">🤝</div>
+    </div>
+    <div class="stat-value" id="kpi-total-donors">{{ total_donors }}</div>
+    <div class="stat-footer">
+      <span>Contributors &amp; Patrons</span>
+      <span style="color: var(--primary-600); font-weight: 600;">Active Base</span>
+    </div>
+  </div>
+
+  <!-- 5. Student Beneficiaries -->
+  <div class="stat-card">
+    <div class="stat-card-header">
+      <span class="stat-label">Enrolled Students</span>
+      <div class="stat-icon purple">🎓</div>
+    </div>
+    <div class="stat-value" id="kpi-total-students">{{ total_students }}</div>
+    <div class="stat-footer">
+      <span>Child Education Sponsorship</span>
+      <span class="badge badge-active">Under Care</span>
+    </div>
+  </div>
+
+  <!-- 6. Active Camps & Drives -->
+  <div class="stat-card">
+    <div class="stat-card-header">
+      <span class="stat-label">Welfare Camps &amp; Drives</span>
+      <div class="stat-icon teal">🏕️</div>
+    </div>
+    <div class="stat-value" id="kpi-active-camps">{{ total_camps }}</div>
+    <div class="stat-footer">
+      <span>Health, Education &amp; Blood Drives</span>
+      <span class="badge badge-upcoming">In Progress</span>
+    </div>
+  </div>
+</div>
+
+<!-- Charts Section -->
+<div class="charts-grid">
+  <!-- Chart 1: Volunteer Distribution by Activity -->
+  <div class="chart-card">
+    <div class="chart-header">
+      <h3>Volunteer Distribution by Activity</h3>
+      <span style="font-size: 0.8rem; color: var(--text-muted);">Real-time groupings</span>
+    </div>
+    <div class="chart-container">
+      <canvas id="activityChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Chart 2: Recent Donation Inflows -->
+  <div class="chart-card">
+    <div class="chart-header">
+      <h3>Donation Inflows by Cause</h3>
+      <span style="font-size: 0.8rem; color: var(--text-muted);">Financial allocation</span>
+    </div>
+    <div class="chart-container">
+      <canvas id="donationChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Volunteers Table Preview -->
+<div class="table-card">
+  <div class="table-toolbar">
+    <div class="table-title">Recent Volunteer Registrations</div>
+    <a href="{{ url_for('admin_volunteers') }}" class="btn btn-outline btn-sm">View Full Directory &rarr;</a>
+  </div>
+  <div class="table-responsive">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Volunteer Name</th>
+          <th>Contact</th>
+          <th>Preferred Activity</th>
+          <th>Joined Date</th>
+          <th>Status</th>
+          <th class="no-export">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for v in recent_volunteers %}
+        <tr>
+          <td>
+            <div class="table-user-cell">
+              <span class="table-user-name">{{ v.full_name }}</span>
+              <span class="table-user-sub">{{ v.address or 'Address not given' }}</span>
+            </div>
+          </td>
+          <td>
+            <div>{{ v.email }}</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">{{ v.phone }}</div>
+          </td>
+          <td><span class="program-badge">{{ v.preferred_activity }}</span></td>
+          <td>{{ v.joined_date.strftime('%d-%b-%Y') if v.joined_date else '' }}</td>
+          <td>
+            <span class="badge badge-{{ v.status|lower }}">{{ v.status }}</span>
+          </td>
+          <td class="no-export">
+            {% if v.status == 'Active' %}
+            <button onclick="updateEntityStatus('{{ url_for('admin_volunteer_status') }}', {{ v.id }}, 'Inactive')" class="action-btn toggle-inactive" title="Set to Inactive">Deactivate</button>
+            {% else %}
+            <button onclick="updateEntityStatus('{{ url_for('admin_volunteer_status') }}', {{ v.id }}, 'Active')" class="action-btn toggle-active" title="Approve & Activate">Activate</button>
+            {% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No volunteers registered yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Recent Donations Table Preview -->
+<div class="table-card">
+  <div class="table-toolbar">
+    <div class="table-title">Recent Contributions &amp; Receipts</div>
+    <a href="{{ url_for('admin_donations') }}" class="btn btn-outline btn-sm">View All Donations &rarr;</a>
+  </div>
+  <div class="table-responsive">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Receipt #</th>
+          <th>Donor Name</th>
+          <th>Allocated Cause</th>
+          <th>Payment Mode</th>
+          <th>Amount</th>
+          <th>Date</th>
+          <th class="no-export">Receipt</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for d in recent_donations %}
+        <tr>
+          <td><code style="font-family: var(--font-mono); font-weight: 700; color: var(--teal-700);">{{ d.receipt_number }}</code></td>
+          <td>
+            <div class="table-user-cell">
+              <span class="table-user-name">{{ d.donor_name }}</span>
+              <span class="table-user-sub">{{ d.donor_email }}</span>
+            </div>
+          </td>
+          <td>{{ d.cause_name }}</td>
+          <td><span class="badge badge-active">{{ d.payment_mode }}</span></td>
+          <td style="font-weight: 700; color: var(--primary-900);">₹{{ "{:,.2f}".format(d.amount) }}</td>
+          <td>{{ d.donation_date.strftime('%d-%b-%Y') if d.donation_date else '' }}</td>
+          <td class="no-export">
+            <a href="{{ url_for('view_receipt', receipt_no=d.receipt_number) }}" class="btn btn-outline btn-sm" target="_blank">
+              📄 View 80G
+            </a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" style="text-align: center; color: var(--text-muted);">No donations recorded yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const activityData = {
+      labels: {{ activity_labels | tojson }},
+      counts: {{ activity_counts | tojson }}
+    };
+
+    const donationData = {
+      labels: {{ donation_labels | tojson }},
+      amounts: {{ donation_amounts | tojson }}
+    };
+
+    renderDashboardCharts(activityData, donationData);
+  });
+</script>
+{% endblock %}

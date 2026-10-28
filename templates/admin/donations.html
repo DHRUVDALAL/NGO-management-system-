@@ -1,0 +1,104 @@
+{% extends 'admin/base_admin.html' %}
+{% set admin_tab = 'donations' %}
+
+{% block title %}Donation Records & 80G Receipts | YuvaShakti Admin{% endblock %}
+
+{% block content %}
+<div class="admin-page-title-row">
+  <div>
+    <h2>Donation Management &amp; Audit Trail</h2>
+    <p style="color: var(--text-muted); font-size: 0.95rem;">Track donor contributions, allocated welfare drives, payment modes, and official 80G receipts.</p>
+  </div>
+  <div class="admin-actions-bar">
+    <button onclick="exportTableToCSV('donations-table', 'yuvashakti_donations.csv')" class="btn btn-outline btn-sm">
+      📥 Export to CSV
+    </button>
+    <a href="{{ url_for('donate') }}" class="btn btn-accent btn-sm" target="_blank">
+      + New Contribution
+    </a>
+  </div>
+</div>
+
+<div class="table-card">
+  <div class="table-toolbar">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="donation-search" placeholder="Search by donor, receipt #, transaction...">
+    </div>
+
+    <div class="table-filters">
+      <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">Payment Mode:</label>
+      <select id="donation-mode-filter" class="form-control" style="padding: 0.45rem 1rem; width: auto; font-size: 0.85rem;">
+        <option value="all">All Modes</option>
+        <option value="upi">UPI</option>
+        <option value="netbanking">NetBanking</option>
+        <option value="card">Credit/Debit Card</option>
+        <option value="cash">Cash</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="data-table" id="donations-table">
+      <thead>
+        <tr>
+          <th>Receipt #</th>
+          <th>Donor Details</th>
+          <th>Allocated Cause / Camp</th>
+          <th>Amount</th>
+          <th>Mode</th>
+          <th>Transaction Ref</th>
+          <th>Date</th>
+          <th class="no-export">Receipt</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for d in donations %}
+        <tr>
+          <td><code style="font-family: var(--font-mono); font-weight: 700; color: var(--teal-700);">{{ d.receipt_number }}</code></td>
+          <td>
+            <div class="table-user-cell">
+              <span class="table-user-name">{{ d.donor_name }}</span>
+              <span class="table-user-sub">{{ d.donor_email }}</span>
+              {% if d.donor_phone %}
+              <span class="table-user-sub">{{ d.donor_phone }}</span>
+              {% endif %}
+            </div>
+          </td>
+          <td>
+            <span style="font-weight: 500;">{{ d.cause_name }}</span>
+          </td>
+          <td style="font-weight: 800; font-size: 1.05rem; color: var(--primary-900);">
+            ₹{{ "{:,.2f}".format(d.amount) }}
+          </td>
+          <td>
+            <span class="badge badge-active">{{ d.payment_mode }}</span>
+          </td>
+          <td>
+            <code style="font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-muted);">{{ d.transaction_ref }}</code>
+          </td>
+          <td style="white-space: nowrap;">
+            {{ d.donation_date.strftime('%d-%b-%Y') if d.donation_date else '' }}
+          </td>
+          <td class="no-export">
+            <a href="{{ url_for('view_receipt', receipt_no=d.receipt_number) }}" class="btn btn-outline btn-sm" target="_blank" title="View Official 80G Receipt">
+              📄 View Slip
+            </a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 3rem;">No donations recorded in database.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initTableFilter('donation-search', 'donation-mode-filter', 'donations-table');
+  });
+</script>
+{% endblock %}

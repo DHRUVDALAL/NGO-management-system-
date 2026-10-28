@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% set active_page = 'about' %}
+
+{% block title %}About Us | YuvaShakti Foundation{% endblock %}
+
+{% block content %}
+<section class="page-header-simple">
+  <div class="container">
+    <div class="section-tag">Who We Are</div>
+    <h1>About YuvaShakti Foundation</h1>
+    <p>Dedicated to fostering social equity, community health, and educational opportunities through volunteer-driven social action.</p>
+  </div>
+</section>
+
+<section class="container" style="margin-bottom: 5rem;">
+  <!-- Overview & Background -->
+  <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3.5rem; align-items: center; margin-bottom: 4.5rem;">
+    <div>
+      <div class="section-tag">Our Story</div>
+      <h2 style="font-size: 2.2rem; margin-bottom: 1.25rem;">Born Out of Youth Energy &amp; Social Compassion</h2>
+      <p style="color: var(--text-muted); line-height: 1.8; margin-bottom: 1.25rem;">
+        Established in 2021 by a dedicated cohort of educators, healthcare professionals, and young community organizers, <strong>YuvaShakti Foundation</strong> began with a simple belief: the potential of India's youth can be channelized to solve the country's most pressing socioeconomic challenges.
+      </p>
+      <p style="color: var(--text-muted); line-height: 1.8; margin-bottom: 1.5rem;">
+        What started as an informal weekend reading circle for 15 children living in urban slums has grown into an institutionalized non-governmental organization operating mobile health checkup camps, student mentorship centers, and emergency relief distribution drives across the region.
+      </p>
+      <div style="display: flex; gap: 1rem;">
+        <a href="{{ url_for('programs') }}" class="btn btn-primary btn-sm">Explore Our Programs</a>
+        <a href="{{ url_for('volunteer_register') }}" class="btn btn-outline btn-sm">Join Our Team</a>
+      </div>
+    </div>
+
+    <div>
+      <div style="background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%); color: white; padding: 2.5rem; border-radius: var(--radius-xl); box-shadow: var(--shadow-xl);">
+        <h3 style="color: #ffffff; font-size: 1.5rem; margin-bottom: 1rem;">Our Core Principles</h3>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 1.25rem;">
+          <li style="display: flex; gap: 0.75rem; align-items: flex-start;">
+            <span style="color: var(--teal-400); font-size: 1.25rem;">✓</span>
+            <div>
+              <strong>Complete Transparency:</strong>
+              <p style="color: #94a3b8; font-size: 0.88rem; margin-top: 0.2rem;">Every rupee donated is accounted for in public campaign progress records.</p>
+            </div>
+          </li>
+          <li style="display: flex; gap: 0.75rem; align-items: flex-start;">
+            <span style="color: var(--teal-400); font-size: 1.25rem;">✓</span>
+            <div>
+              <strong>Grassroots Direct Impact:</strong>
+              <p style="color: #94a3b8; font-size: 0.88rem; margin-top: 0.2rem;">We work directly with families and students without intermediaries.</p>
+            </div>
+          </li>
+          <li style="display: flex; gap: 0.75rem; align-items: flex-start;">
+            <span style="color: var(--teal-400); font-size: 1.25rem;">✓</span>
+            <div>
+              <strong>Youth Leadership:</strong>
+              <p style="color: #94a3b8; font-size: 0.88rem; margin-top: 0.2rem;">Empowering college students and young professionals to lead community solutions.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mission and Vision -->
+  <div class="mission-vision-grid">
+    <div class="mv-card mission">
+      <div class="mv-icon">🎯</div>
+      <h3>The Foundation Mission</h3>
+      <p>
+        To mobilize grassroots human capital and philanthropic contributions in order to ensure that no child drops out of school due to lack of study material or tuition support, and that preventative health checkups reach the most underprivileged pockets of society.
+      </p>
+    </div>
+
+    <div class="mv-card vision">
+      <div class="mv-icon">🌟</div>
+      <h3>The Foundation Vision</h3>
+      <p>
+        To foster a resilient, enlightened society where civic participation is second nature to every citizen, educational barriers are eradicated, and vulnerable families can access essential welfare with self-respect and dignity.
+      </p>
+    </div>
+  </div>
+
+  <!-- Operational Flow / 3-Tier Model -->
+  <div style="background: #ffffff; padding: 3rem; border-radius: var(--radius-xl); border: 1px solid var(--border-subtle); margin-bottom: 4rem;">
+    <div class="section-header" style="margin-bottom: 2.5rem;">
+      <div class="section-tag">Systematic Approach</div>
+      <h2 class="section-title">How Our Foundation Operates</h2>
+      <p class="section-subtitle">A proven 3-phase lifecycle turning community needs into measurable change.</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; text-align: center;">
+      <div style="padding: 1.5rem; background: var(--bg-main); border-radius: var(--radius-lg);">
+        <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--teal-100); color: var(--teal-700); font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">1</div>
+        <h4 style="font-size: 1.15rem; margin-bottom: 0.5rem;">Need Assessment</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted);">Field volunteers survey municipal wards to identify out-of-school children and healthcare gaps.</p>
+      </div>
+
+      <div style="padding: 1.5rem; background: var(--bg-main); border-radius: var(--radius-lg);">
+        <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--amber-100); color: var(--amber-700); font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">2</div>
+        <h4 style="font-size: 1.15rem; margin-bottom: 0.5rem;">Camp &amp; Drive Execution</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted);">Organizing specialized camps with registered volunteers, medical staff, and verified donor funding.</p>
+      </div>
+
+      <div style="padding: 1.5rem; background: var(--bg-main); border-radius: var(--radius-lg);">
+        <div style="width: 50px; height: 50px; border-radius: 50%; background: #dbeafe; color: #1d4ed8; font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">3</div>
+        <h4 style="font-size: 1.15rem; margin-bottom: 0.5rem;">Long-Term Monitoring</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted);">Continuous tracking of student beneficiaries, school grades, and volunteer service hours in the database.</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

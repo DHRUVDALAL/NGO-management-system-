@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% set active_page = 'contact' %}
+
+{% block title %}Contact Us | YuvaShakti Foundation{% endblock %}
+
+{% block content %}
+<section class="page-header-simple">
+  <div class="container">
+    <div class="section-tag">Reach Out</div>
+    <h1>Get in Touch with Us</h1>
+    <p>Have questions about our welfare camps, student sponsorship, or corporate partnerships? Send us a message and our team will respond promptly.</p>
+  </div>
+</section>
+
+<section class="container" style="margin-bottom: 5rem;">
+  <div style="display: grid; grid-template-columns: 1fr 1.35fr; gap: 3rem; align-items: flex-start;">
+    <!-- Contact Info Card -->
+    <div style="background: linear-gradient(135deg, var(--primary-900) 0%, var(--primary-700) 100%); color: white; border-radius: var(--radius-xl); padding: 3rem; box-shadow: var(--shadow-lg);">
+      <h3 style="color: #ffffff; font-size: 1.6rem; margin-bottom: 1rem;">Foundation Secretariat</h3>
+      <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.7; margin-bottom: 2.5rem;">
+        We welcome visits from prospective volunteers, donors, and community members during official working hours.
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <div style="display: flex; gap: 1rem; align-items: flex-start;">
+          <div style="font-size: 1.4rem;">📍</div>
+          <div>
+            <h5 style="color: #ffffff; font-size: 1rem; margin-bottom: 0.25rem;">Main Office Address</h5>
+            <p style="color: #94a3b8; font-size: 0.9rem;">YuvaShakti Bhavan, Sector 4, Central Ward, Maharashtra, India</p>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 1rem; align-items: flex-start;">
+          <div style="font-size: 1.4rem;">📞</div>
+          <div>
+            <h5 style="color: #ffffff; font-size: 1rem; margin-bottom: 0.25rem;">Helpline &amp; Camp Inquiries</h5>
+            <p style="color: #94a3b8; font-size: 0.9rem;">+91 98200 12345 / +91 98200 54321</p>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 1rem; align-items: flex-start;">
+          <div style="font-size: 1.4rem;">✉️</div>
+          <div>
+            <h5 style="color: #ffffff; font-size: 1rem; margin-bottom: 0.25rem;">Official Email</h5>
+            <p style="color: #94a3b8; font-size: 0.9rem;">contact@yuvashaktifoundation.org</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Form Card -->
+    <div class="form-card" style="margin: 0; max-width: 100%;">
+      <h3 style="font-size: 1.35rem; margin-bottom: 1.5rem; color: var(--primary-900);">Send an Online Message</h3>
+
+      <form method="POST" action="{{ url_for('contact') }}" data-validate="true" id="contact-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="name">Your Name <span class="required">*</span></label>
+            <input type="text" id="name" name="name" class="form-control" placeholder="e.g. Deepak Trivedi" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email">Your Email <span class="required">*</span></label>
+            <input type="email" id="email" name="email" class="form-control" placeholder="deepak@example.com" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" class="form-control" placeholder="+91 98201 99223">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="subject">Subject / Purpose <span class="required">*</span></label>
+            <input type="text" id="subject" name="subject" class="form-control" placeholder="e.g. CSR Partnership Inquiry" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label" for="message">Your Message <span class="required">*</span></label>
+            <textarea id="message" name="message" class="form-control" rows="5" placeholder="Write your questions, collaboration ideas, or feedback here..." required></textarea>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; text-align: right;">
+          <button type="submit" class="btn btn-primary" id="btn-submit-contact">
+            <span>Send Message &rarr;</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

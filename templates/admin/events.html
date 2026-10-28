@@ -1,0 +1,173 @@
+{% extends 'admin/base_admin.html' %}
+{% set admin_tab = 'events' %}
+
+{% block title %}Camps & Events Control | YuvaShakti Admin{% endblock %}
+
+{% block content %}
+<div class="admin-page-title-row">
+  <div>
+    <h2>Camps, Drives &amp; Welfare Events Manager</h2>
+    <p style="color: var(--text-muted); font-size: 0.95rem;">Create new welfare camps, track fund collection targets, and monitor current status.</p>
+  </div>
+  <div class="admin-actions-bar">
+    <button onclick="document.getElementById('new-camp-modal').classList.add('open')" class="btn btn-primary btn-sm" id="btn-open-create-camp">
+      + Create New Camp / Drive
+    </button>
+  </div>
+</div>
+
+<div class="table-card">
+  <div class="table-toolbar">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="camp-search" placeholder="Search by title, venue, event type...">
+    </div>
+
+    <div class="table-filters">
+      <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">Status:</label>
+      <select id="camp-status-filter" class="form-control" style="padding: 0.45rem 1rem; width: auto; font-size: 0.85rem;">
+        <option value="all">All Statuses</option>
+        <option value="upcoming">Upcoming</option>
+        <option value="ongoing">Ongoing</option>
+        <option value="completed">Completed</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="data-table" id="camps-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Event Title &amp; Description</th>
+          <th>Type</th>
+          <th>Date &amp; Venue</th>
+          <th>Budget Progress</th>
+          <th>Capacity</th>
+          <th>Current Status</th>
+          <th class="no-export">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for e in events %}
+        <tr>
+          <td><code style="font-family: var(--font-mono);">#{{ e.id }}</code></td>
+          <td style="max-width: 280px;">
+            <div class="table-user-cell">
+              <span class="table-user-name" style="font-size: 0.95rem;">{{ e.title }}</span>
+              <span class="table-user-sub" style="margin-top: 0.2rem;">{{ e.description }}</span>
+            </div>
+          </td>
+          <td><span class="program-badge">{{ e.event_type }}</span></td>
+          <td>
+            <div style="font-weight: 600;">📅 {{ e.event_date.strftime('%d-%b-%Y') if e.event_date else '' }}</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">📍 {{ e.venue }}</div>
+          </td>
+          <td style="min-width: 170px;">
+            <div style="font-size: 0.82rem; font-weight: 700; display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+              <span>₹{{ "{:,.0f}".format(e.raised_budget) }}</span>
+              <span style="color: var(--text-muted);">Target: ₹{{ "{:,.0f}".format(e.target_budget) }}</span>
+            </div>
+            <div class="camp-progress-bar" style="margin: 0;">
+              {% set pct = (e.raised_budget / e.target_budget * 100)|round|int if e.target_budget > 0 else 0 %}
+              <div class="progress-fill" style="width: {{ [pct, 100]|min }}%;"></div>
+            </div>
+          </td>
+          <td>👥 {{ e.volunteer_capacity }}</td>
+          <td>
+            <span class="badge badge-{{ e.status|lower }}">{{ e.status }}</span>
+          </td>
+          <td class="no-export">
+            <div class="table-actions">
+              {% if e.status == 'Upcoming' %}
+              <button onclick="updateEntityStatus('{{ url_for('admin_event_status') }}', {{ e.id }}, 'Ongoing')" class="action-btn toggle-active" title="Mark as Ongoing">Start Camp</button>
+              {% elif e.status == 'Ongoing' %}
+              <button onclick="updateEntityStatus('{{ url_for('admin_event_status') }}', {{ e.id }}, 'Completed')" class="action-btn toggle-active" title="Mark Completed">Complete</button>
+              {% else %}
+              <button onclick="updateEntityStatus('{{ url_for('admin_event_status') }}', {{ e.id }}, 'Upcoming')" class="action-btn toggle-inactive" title="Reopen Camp">Reopen</button>
+              {% endif %}
+
+              <form method="POST" action="{{ url_for('admin_delete_event', id=e.id) }}" style="display: inline;" onsubmit="return confirm('Delete this event?');">
+                <button type="submit" class="action-btn" style="color: var(--rose-600);" title="Delete Camp">✕</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 3rem;">No camps or events created yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Create New Camp / Drive -->
+<div class="modal-overlay" id="new-camp-modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 style="font-size: 1.3rem; margin: 0; color: var(--primary-900);">Schedule New Welfare Camp / Drive</h3>
+      <button class="modal-close" onclick="document.getElementById('new-camp-modal').classList.remove('open')">&times;</button>
+    </div>
+
+    <form method="POST" action="{{ url_for('admin_create_event') }}">
+      <div class="form-group">
+        <label class="form-label" for="title">Event / Camp Title <span class="required">*</span></label>
+        <input type="text" id="title" name="title" class="form-control" placeholder="e.g. Winter Warmth & Food Kit Distribution" required>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="form-group">
+          <label class="form-label" for="event_type">Event Type <span class="required">*</span></label>
+          <select id="event_type" name="event_type" class="form-control" required>
+            <option value="Health Camp">Health &amp; Eye Checkup Camp</option>
+            <option value="Blood Donation">Mega Blood Donation Drive</option>
+            <option value="Education Drive">Education &amp; Book Drive</option>
+            <option value="Food Distribution">Food &amp; Nutrition Distribution</option>
+            <option value="Youth Workshop">Youth Skill Workshop</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="event_date">Event Date <span class="required">*</span></label>
+          <input type="date" id="event_date" name="event_date" class="form-control" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="venue">Venue / Location <span class="required">*</span></label>
+        <input type="text" id="venue" name="venue" class="form-control" placeholder="e.g. Municipal Ward 7 Community Center" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="description">Event Description <span class="required">*</span></label>
+        <textarea id="description" name="description" class="form-control" rows="3" placeholder="Explain the objective, targeted community, and required materials..." required></textarea>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="form-group">
+          <label class="form-label" for="target_budget">Target Budget (₹)</label>
+          <input type="number" id="target_budget" name="target_budget" class="form-control" placeholder="50000" min="0" value="50000">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="volunteer_capacity">Volunteer Capacity</label>
+          <input type="number" id="volunteer_capacity" name="volunteer_capacity" class="form-control" placeholder="25" min="1" value="25">
+        </div>
+      </div>
+
+      <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 1rem;">
+        <button type="button" class="btn btn-outline" onclick="document.getElementById('new-camp-modal').classList.remove('open')">Cancel</button>
+        <button type="submit" class="btn btn-primary">Create Event &rarr;</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initTableFilter('camp-search', 'camp-status-filter', 'camps-table');
+  });
+</script>
+{% endblock %}

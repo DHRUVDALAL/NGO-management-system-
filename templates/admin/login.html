@@ -1,0 +1,40 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}Admin Sign In | YuvaShakti Foundation{% endblock %}
+
+{% block content %}
+<div style="max-width: 440px; margin: 3rem auto;">
+  <div style="text-align: center; margin-bottom: 2rem;">
+    <div class="brand-icon" style="width: 54px; height: 54px; font-size: 1.5rem; margin: 0 auto 1rem;">YSF</div>
+    <h2 style="font-size: 2rem; color: var(--primary-900);">Admin Control Center</h2>
+    <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.35rem;">Authenticate to access NGO management operations</p>
+  </div>
+
+  <div class="form-card" style="padding: 2.5rem; margin-bottom: 2rem;">
+    <form method="POST" action="{{ url_for('admin_login') }}" id="admin-login-form">
+      <div class="form-group">
+        <label class="form-label" for="username">Username</label>
+        <input type="text" id="username" name="username" class="form-control" placeholder="Enter admin username" required autofocus>
+      </div>
+
+      <div class="form-group" style="margin-top: 1rem;">
+        <label class="form-label" for="password">Password</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="Enter admin password" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary" id="btn-login-submit" style="width: 100%; margin-top: 1.5rem; padding: 0.85rem;">
+        Secure Sign In &rarr;
+      </button>
+    </form>
+
+    <div style="margin-top: 1.75rem; padding: 0.85rem; background: var(--bg-main); border: 1px dashed var(--border-strong); border-radius: var(--radius-md); font-size: 0.82rem; color: var(--text-muted); text-align: center;">
+      🔑 <strong>Default Academic Credentials:</strong><br>
+      Username: <code style="color: var(--teal-700); font-weight: 700;">admin</code> &bull; Password: <code style="color: var(--teal-700); font-weight: 700;">admin123</code>
+    </div>
+  </div>
+
+  <div style="text-align: center;">
+    <a href="{{ url_for('home') }}" style="font-size: 0.9rem; color: var(--text-muted);">&larr; Return to Public Website</a>
+  </div>
+</div>
+{% endblock %}

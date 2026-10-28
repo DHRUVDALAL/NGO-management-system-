@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% set active_page = 'volunteer' %}
+
+{% block title %}Volunteer Registration | YuvaShakti Foundation{% endblock %}
+
+{% block content %}
+<section class="page-header-simple">
+  <div class="container">
+    <div class="section-tag">Join the Movement</div>
+    <h1>Volunteer Registration</h1>
+    <p>Give your time, skills, and energy to make a genuine difference in the lives of children and families. Fill in your details to join the YuvaShakti volunteer community.</p>
+  </div>
+</section>
+
+<section class="container">
+  <div class="form-card">
+    <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.25rem;">
+      <h3 style="font-size: 1.4rem; color: var(--primary-900); margin-bottom: 0.35rem;">Volunteer Application Form</h3>
+      <p style="font-size: 0.9rem; color: var(--text-muted);">Please provide accurate details so our camp coordination team can reach out to you.</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('volunteer_register') }}" data-validate="true" id="volunteer-form">
+      <div class="form-grid">
+        <!-- Full Name -->
+        <div class="form-group">
+          <label class="form-label" for="full_name">
+            Full Name <span class="required">*</span>
+          </label>
+          <input type="text" id="full_name" name="full_name" class="form-control" placeholder="e.g. Aarav Sharma" required>
+        </div>
+
+        <!-- Email Address -->
+        <div class="form-group">
+          <label class="form-label" for="email">
+            Email Address <span class="required">*</span>
+          </label>
+          <input type="email" id="email" name="email" class="form-control" placeholder="aarav@example.com" required>
+        </div>
+
+        <!-- Phone Number -->
+        <div class="form-group">
+          <label class="form-label" for="phone">
+            Contact Number <span class="required">*</span>
+          </label>
+          <input type="tel" id="phone" name="phone" class="form-control" placeholder="+91 98765 43210" required>
+        </div>
+
+        <!-- Date of Birth -->
+        <div class="form-group">
+          <label class="form-label" for="date_of_birth">
+            Date of Birth
+          </label>
+          <input type="date" id="date_of_birth" name="date_of_birth" class="form-control">
+        </div>
+
+        <!-- Preferred Activity (Chapter 5.4) -->
+        <div class="form-group full-width">
+          <label class="form-label" for="preferred_activity">
+            Preferred Volunteer Activity <span class="required">*</span>
+          </label>
+          <select id="preferred_activity" name="preferred_activity" class="form-control" required>
+            <option value="" disabled selected>-- Select an Activity --</option>
+            <option value="Education Support">Education Support &amp; Children Tutoring</option>
+            <option value="Health Camps">Health &amp; Eye Checkup Camp Assistance</option>
+            <option value="Blood Donation Drives">Blood Donation Camp Coordination</option>
+            <option value="Relief & Food Drives">Food, Nutrition &amp; Winter Relief Drives</option>
+            <option value="Youth Skill Development">Youth Mentorship &amp; Computer Literacy</option>
+            <option value="Community Awareness">Social Media, Content &amp; Field Survey</option>
+          </select>
+          <div class="form-help">Select the social domain where you can contribute your passion or specialized skills.</div>
+        </div>
+
+        <!-- Skills / Professional Background -->
+        <div class="form-group full-width">
+          <label class="form-label" for="skills">
+            Skills, Education or Prior Experience
+          </label>
+          <textarea id="skills" name="skills" class="form-control" rows="3" placeholder="Tell us about your background, subject expertise (e.g., Math teacher, Medical intern, Graphic designer, Event coordinator)..."></textarea>
+        </div>
+
+        <!-- Residential Address -->
+        <div class="form-group full-width">
+          <label class="form-label" for="address">
+            Residential City / Address
+          </label>
+          <input type="text" id="address" name="address" class="form-control" placeholder="e.g. Sector 12, Pune / Mumbai">
+        </div>
+      </div>
+
+      <div style="margin-top: 2rem; border-top: 1px solid var(--border-subtle); padding-top: 1.5rem; display: flex; justify-content: flex-end; gap: 1rem;">
+        <button type="reset" class="btn btn-outline">Reset Form</button>
+        <button type="submit" class="btn btn-primary" id="btn-submit-volunteer">
+          <span>Submit Registration &rarr;</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

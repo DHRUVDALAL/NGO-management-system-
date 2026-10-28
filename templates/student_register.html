@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% set active_page = 'student' %}
+
+{% block title %}Student Beneficiary Enrollment | YuvaShakti Foundation{% endblock %}
+
+{% block content %}
+<section class="page-header-simple">
+  <div class="container">
+    <div class="section-tag">Child Education &amp; Welfare</div>
+    <h1>Student Beneficiary Enrollment</h1>
+    <p>Register a student from an economically challenged background for free tuition coaching, school kits, and nutritional assistance.</p>
+  </div>
+</section>
+
+<section class="container">
+  <div class="form-card">
+    <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.25rem;">
+      <h3 style="font-size: 1.4rem; color: var(--primary-900); margin-bottom: 0.35rem;">Student Profile Registration</h3>
+      <p style="font-size: 0.9rem; color: var(--text-muted);">Please provide the student's legal name, date of birth, age, and guardian details.</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('student_register') }}" data-validate="true" id="student-form">
+      <div class="form-grid">
+        <!-- Student Name -->
+        <div class="form-group full-width">
+          <label class="form-label" for="student_name">
+            Student Full Name <span class="required">*</span>
+          </label>
+          <input type="text" id="student_name" name="student_name" class="form-control" placeholder="e.g. Ananya Patil" required>
+        </div>
+
+        <!-- Date of Birth -->
+        <div class="form-group">
+          <label class="form-label" for="dob">
+            Date of Birth <span class="required">*</span>
+          </label>
+          <input type="date" id="dob" name="dob" class="form-control" required>
+        </div>
+
+        <!-- Age -->
+        <div class="form-group">
+          <label class="form-label" for="age">
+            Age (Years) <span class="required">*</span>
+          </label>
+          <input type="number" id="age" name="age" class="form-control" placeholder="e.g. 12" min="3" max="25" required>
+        </div>
+
+        <!-- Gender -->
+        <div class="form-group">
+          <label class="form-label" for="gender">
+            Gender <span class="required">*</span>
+          </label>
+          <select id="gender" name="gender" class="form-control" required>
+            <option value="" disabled selected>-- Select Gender --</option>
+            <option value="Female">Female</option>
+            <option value="Male">Male</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <!-- Current School & Grade -->
+        <div class="form-group">
+          <label class="form-label" for="school_grade">
+            School &amp; Grade / Class <span class="required">*</span>
+          </label>
+          <input type="text" id="school_grade" name="school_grade" class="form-control" placeholder="e.g. Class 7 - Municipal Vidya Mandir" required>
+        </div>
+
+        <!-- Guardian Full Name -->
+        <div class="form-group">
+          <label class="form-label" for="guardian_name">
+            Parent / Guardian Name <span class="required">*</span>
+          </label>
+          <input type="text" id="guardian_name" name="guardian_name" class="form-control" placeholder="e.g. Ramesh Patil (Father)" required>
+        </div>
+
+        <!-- Guardian Phone -->
+        <div class="form-group">
+          <label class="form-label" for="guardian_phone">
+            Parent / Guardian Phone <span class="required">*</span>
+          </label>
+          <input type="tel" id="guardian_phone" name="guardian_phone" class="form-control" placeholder="+91 98211 44556" required>
+        </div>
+
+        <!-- Assistance Type -->
+        <div class="form-group full-width">
+          <label class="form-label" for="assistance_type">
+            Primary Welfare Assistance Needed <span class="required">*</span>
+          </label>
+          <select id="assistance_type" name="assistance_type" class="form-control" required>
+            <option value="" disabled selected>-- Select Assistance Program --</option>
+            <option value="Free Tuition & Books">Gyan Setu: Free Evening Tuition &amp; Textbooks</option>
+            <option value="Scholarship">Academic Fee Sponsorship / Scholarship</option>
+            <option value="Nutrition & School Uniform">Nutrition Meal Program &amp; Uniforms</option>
+            <option value="School Supplies Kit">Annual School Kit (Stationery, Bag &amp; Books)</option>
+            <option value="Digital Literacy">After-School Computer Lab Access</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-top: 2rem; border-top: 1px solid var(--border-subtle); padding-top: 1.5rem; display: flex; justify-content: flex-end; gap: 1rem;">
+        <button type="reset" class="btn btn-outline">Clear Fields</button>
+        <button type="submit" class="btn btn-primary" id="btn-submit-student">
+          <span>Enroll Beneficiary Student &rarr;</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

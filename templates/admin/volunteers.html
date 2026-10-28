@@ -1,0 +1,110 @@
+{% extends 'admin/base_admin.html' %}
+{% set admin_tab = 'volunteers' %}
+
+{% block title %}Volunteers Directory | YuvaShakti Admin{% endblock %}
+
+{% block content %}
+<div class="admin-page-title-row">
+  <div>
+    <h2>Volunteers Directory</h2>
+    <p style="color: var(--text-muted); font-size: 0.95rem;">Manage volunteer applications, field assignments, and engagement statuses.</p>
+  </div>
+  <div class="admin-actions-bar">
+    <button onclick="exportTableToCSV('volunteers-table', 'yuvashakti_volunteers.csv')" class="btn btn-outline btn-sm">
+      📥 Export to CSV
+    </button>
+    <a href="{{ url_for('volunteer_register') }}" class="btn btn-primary btn-sm" target="_blank">
+      + Register Volunteer
+    </a>
+  </div>
+</div>
+
+<div class="table-card">
+  <div class="table-toolbar">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="volunteer-search" placeholder="Search by name, email, skills...">
+    </div>
+
+    <div class="table-filters">
+      <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">Status:</label>
+      <select id="volunteer-status-filter" class="form-control" style="padding: 0.45rem 1rem; width: auto; font-size: 0.85rem;">
+        <option value="all">All Statuses</option>
+        <option value="active">Active</option>
+        <option value="pending">Pending</option>
+        <option value="inactive">Inactive</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="data-table" id="volunteers-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Volunteer Details</th>
+          <th>Contact Info</th>
+          <th>Skills &amp; Background</th>
+          <th>Preferred Activity</th>
+          <th>Joined</th>
+          <th>Status</th>
+          <th class="no-export">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for v in volunteers %}
+        <tr>
+          <td><code style="font-family: var(--font-mono);">#{{ v.id }}</code></td>
+          <td>
+            <div class="table-user-cell">
+              <span class="table-user-name">{{ v.full_name }}</span>
+              <span class="table-user-sub">
+                DOB: {{ v.date_of_birth.strftime('%d-%b-%Y') if v.date_of_birth else 'N/A' }}
+              </span>
+              <span class="table-user-sub">{{ v.address or '' }}</span>
+            </div>
+          </td>
+          <td>
+            <div>{{ v.email }}</div>
+            <div style="font-size: 0.82rem; color: var(--text-muted);">{{ v.phone }}</div>
+          </td>
+          <td style="max-width: 200px;">
+            <div style="font-size: 0.85rem; color: var(--text-main);">{{ v.skills or 'None mentioned' }}</div>
+          </td>
+          <td><span class="program-badge">{{ v.preferred_activity }}</span></td>
+          <td style="white-space: nowrap;">{{ v.joined_date.strftime('%d-%b-%Y') if v.joined_date else '' }}</td>
+          <td>
+            <span class="badge badge-{{ v.status|lower }}">{{ v.status }}</span>
+          </td>
+          <td class="no-export">
+            <div class="table-actions">
+              {% if v.status == 'Active' %}
+              <button onclick="updateEntityStatus('{{ url_for('admin_volunteer_status') }}', {{ v.id }}, 'Inactive')" class="action-btn toggle-inactive" title="Set Inactive">Deactivate</button>
+              {% elif v.status == 'Pending' %}
+              <button onclick="updateEntityStatus('{{ url_for('admin_volunteer_status') }}', {{ v.id }}, 'Active')" class="action-btn toggle-active" title="Approve Application">Approve</button>
+              {% else %}
+              <button onclick="updateEntityStatus('{{ url_for('admin_volunteer_status') }}', {{ v.id }}, 'Active')" class="action-btn toggle-active" title="Reactivate">Reactivate</button>
+              {% endif %}
+
+              <form method="POST" action="{{ url_for('admin_delete_volunteer', id=v.id) }}" style="display: inline;" onsubmit="return confirm('Are you sure you want to remove this volunteer record?');">
+                <button type="submit" class="action-btn" style="color: var(--rose-600);" title="Delete Record">✕</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 3rem;">No volunteers recorded in database.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initTableFilter('volunteer-search', 'volunteer-status-filter', 'volunteers-table');
+  });
+</script>
+{% endblock %}

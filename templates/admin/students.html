@@ -1,0 +1,113 @@
+{% extends 'admin/base_admin.html' %}
+{% set admin_tab = 'students' %}
+
+{% block title %}Student Beneficiaries Registry | YuvaShakti Admin{% endblock %}
+
+{% block content %}
+<div class="admin-page-title-row">
+  <div>
+    <h2>Student &amp; Child Beneficiaries Registry</h2>
+    <p style="color: var(--text-muted); font-size: 0.95rem;">Monitor student enrollment, age, date of birth, schooling status, and welfare aid allocations.</p>
+  </div>
+  <div class="admin-actions-bar">
+    <button onclick="exportTableToCSV('students-table', 'yuvashakti_students.csv')" class="btn btn-outline btn-sm">
+      📥 Export to CSV
+    </button>
+    <a href="{{ url_for('student_register') }}" class="btn btn-primary btn-sm" target="_blank">
+      + Enroll Student
+    </a>
+  </div>
+</div>
+
+<div class="table-card">
+  <div class="table-toolbar">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="student-search" placeholder="Search by student, guardian, school...">
+    </div>
+
+    <div class="table-filters">
+      <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">Status:</label>
+      <select id="student-status-filter" class="form-control" style="padding: 0.45rem 1rem; width: auto; font-size: 0.85rem;">
+        <option value="all">All Statuses</option>
+        <option value="active">Active</option>
+        <option value="graduated">Graduated</option>
+        <option value="suspended">Suspended</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="data-table" id="students-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Student Name</th>
+          <th>DOB &amp; Age</th>
+          <th>Gender</th>
+          <th>Parent / Guardian</th>
+          <th>School &amp; Grade</th>
+          <th>Welfare Assistance</th>
+          <th>Enrolled</th>
+          <th>Status</th>
+          <th class="no-export">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in students %}
+        <tr>
+          <td><code style="font-family: var(--font-mono);">#{{ s.id }}</code></td>
+          <td>
+            <div class="table-user-cell">
+              <span class="table-user-name" style="font-size: 0.95rem;">{{ s.student_name }}</span>
+            </div>
+          </td>
+          <td>
+            <div><strong>{{ s.age }} yrs</strong></div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">DOB: {{ s.dob.strftime('%d-%b-%Y') if s.dob else '' }}</div>
+          </td>
+          <td>{{ s.gender }}</td>
+          <td>
+            <div>{{ s.guardian_name }}</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">{{ s.guardian_phone }}</div>
+          </td>
+          <td>{{ s.school_grade }}</td>
+          <td>
+            <span class="program-badge">{{ s.assistance_type }}</span>
+          </td>
+          <td style="white-space: nowrap;">
+            {{ s.enrolled_date.strftime('%d-%b-%Y') if s.enrolled_date else '' }}
+          </td>
+          <td>
+            <span class="badge badge-{{ s.status|lower }}">{{ s.status }}</span>
+          </td>
+          <td class="no-export">
+            <div class="table-actions">
+              {% if s.status == 'Active' %}
+              <button onclick="updateEntityStatus('{{ url_for('admin_student_status') }}', {{ s.id }}, 'Graduated')" class="action-btn toggle-inactive" title="Mark as Graduated">Graduated</button>
+              {% else %}
+              <button onclick="updateEntityStatus('{{ url_for('admin_student_status') }}', {{ s.id }}, 'Active')" class="action-btn toggle-active" title="Set to Active">Activate</button>
+              {% endif %}
+
+              <form method="POST" action="{{ url_for('admin_delete_student', id=s.id) }}" style="display: inline;" onsubmit="return confirm('Remove student beneficiary record?');">
+                <button type="submit" class="action-btn" style="color: var(--rose-600);" title="Delete Student Record">✕</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="10" style="text-align: center; color: var(--text-muted); padding: 3rem;">No student beneficiaries registered yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initTableFilter('student-search', 'student-status-filter', 'students-table');
+  });
+</script>
+{% endblock %}
